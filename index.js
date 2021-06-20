@@ -84,6 +84,18 @@ client.connect((err) => {
         });
     });
 
+    app.get("/employees", (req, res) => {
+        employees.find({}).toArray((err, doc) => {
+            res.send(doc);
+        });
+    });
+
+    app.get("/seekers", (req, res) => {
+        seekers.find({}).toArray((err, doc) => {
+            res.send(doc);
+        });
+    });
+
     app.post("/add-job", (req, res) => {
         const job = req.body;
         jobs.insertOne(job).then((result) => {
