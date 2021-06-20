@@ -97,6 +97,12 @@ client.connect((err) => {
         });
     });
 
+    app.get("/approvedJobs", (req, res) => {
+        jobs.find({status: 'approved'}).toArray((err, doc) => {
+            res.send(doc);
+        });
+    });
+
     app.get("/jobsByEmail/:email", (req, res) => {
         const email = req.params.email;
         jobs.find({ email }).toArray((err, doc) => {
@@ -118,10 +124,16 @@ client.connect((err) => {
         });
     });
 
+    app.get("/applications", (req, res) => {
+        applications.find({}).toArray((err, doc) => {
+            res.send(doc);
+        });
+    });
+
     app.post("/application-by-seeker", (req, res) => {
         const email = req.body.email;
         applications
-            .find({ 'applicationInfo.email': email  })
+            .find({ "applicationInfo.email": email })
             .toArray((err, doc) => {
                 res.send(doc);
             });
@@ -129,91 +141,21 @@ client.connect((err) => {
 
     app.post("/application-by-employee", (req, res) => {
         const email = req.body.email;
-        applications
-            .find({ 'jobInfo.email': email  })
-            .toArray((err, doc) => {
-                res.send(doc);
-            });
+        applications.find({ "jobInfo.email": email }).toArray((err, doc) => {
+            res.send(doc);
+        });
     });
 
-    // app.post("/add-boat", (req, res) => {
-    //   const imgFile = req.files.boatImg;
-    //   const imgData = imgFile.data;
-    //   const encImg = imgData.toString("base64");
-    //   const boatImg = {
-    //     type: imgFile.mimetype,
-    //     size: imgFile.size,
-    //     img: Buffer.from(encImg, "base64"),
-    //   };
-    //   const boatInfo = req.body;
+    app.patch("/statusUpdate/:id", (req, res) => {
+        const stat = req.query.status;
+        const id = req.params.id;
+        jobs.updateOne({ _id: ObjectID(id) }, { $set: { status: stat } }).then(
+            (result) => {
+                res.send(result.modifiedCount > 0);
+            }
+        );
+    });
 
-    //   boatsCollection.insertOne({ ...boatInfo, boatImg }).then((result) => {
-    //     res.send(result.insertedCount > 0);
-    //   });
-    // });
-
-    // app.get("/boatByName/:boat", (req, res) => {
-    //   const boat = req.params.boat;
-    //   boatsCollection.find({ boatName: boat }).toArray((err, doc) => {
-    //     res.send(doc);
-    //   });
-    // });
-
-    // app.delete("/delete-boat", (req, res) => {
-    //   const id = req.query.id;
-    //   boatsCollection.deleteOne({ _id: ObjectID(id) }).then((result) => {
-    //     res.send(result.deletedCount > 0);
-    //   });
-    // });
-
-    // app.post("/add-review", (req, res) => {
-    //   const review = req.body;
-    //   reviewsCollection.insertOne(review).then((result) => {
-    //     res.send(result.insertedCount > 0);
-    //   });
-    // });
-
-    // app.get("/reviews", (req, res) => {
-    //   reviewsCollection.find({}).toArray((err, doc) => {
-    //     res.send(doc);
-    //   });
-    // });
-
-    // app.post("/review-by-user", (req, res) => {
-    //   const email = req.body.email;
-    //   reviewsCollection.find({ email: email }).toArray((err, doc) => {
-    //     res.send(doc.length > 0);
-    //   });
-    // });
-
-    // app.post("/add-booking", (req, res) => {
-    //   const booking = req.body;
-    //   bookingsCollection.insertOne(booking).then((result) => {
-    //     // res.send(result.insertedCount > 0);
-    //     res.send(result);
-    //   });
-    // });
-
-    // app.get("/bookings", (req, res) => {
-    //   bookingsCollection.find({}).toArray((err, doc) => {
-    //     res.send(doc);
-    //   });
-    // });
-
-    // app.post("/booking-by-user", (req, res) => {
-    //   const email = req.body.email;
-    //   bookingsCollection.find({ email: email }).toArray((err, doc) => {
-    //     res.send(doc);
-    //   });
-    // });
-
-    // app.patch("/statusUpdate/:id", (req, res) => {
-    //   const stat = req.query.status;
-    //   const id = req.params.id;
-    //   bookingsCollection.updateOne({ _id: ObjectID(id) }, { $set: { status: stat } }).then((result) => {
-    //     res.send(result.modifiedCount > 0);
-    //   });
-    // });
 });
 
 app.listen(port, () => {
