@@ -136,7 +136,8 @@ client.connect((err) => {
         const email = req.body.email;
         empPackage.find({ 'package.email': email }).toArray((err, doc) => {
             if (doc.length > 0) {
-                if (doc[doc.length - 1].expDate > new Date.getTime()) {
+                console.log(doc[0]);
+                if (doc[doc.length - 1].package.expDate > Date.now()) {
                     jobs.insertOne(job).then((result) => {
                         res.send(result.insertedCount > 0);
                     });
