@@ -64,7 +64,7 @@ client.connect((err) => {
                     res.send(result.insertedCount > 0);
                 });
             } else {
-                res.send("The email address is already in use by another account.")
+                res.send(false)
             }
         })
     });
