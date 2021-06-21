@@ -12,7 +12,6 @@ const client = new MongoClient(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
-console.log();
 const port = process.env.PORT || 5000;
 
 const app = express();
@@ -87,7 +86,6 @@ client.connect((err) => {
         const employee = req.body;
         const email = req.body.email;
         employees.find({ email: email }).toArray((err, doc) => {
-            console.log(doc);
             if ((doc.length > 0)) {
                 res.send(false);
             } else {
@@ -136,7 +134,6 @@ client.connect((err) => {
         const email = req.body.email;
         empPackage.find({ 'package.email': email }).toArray((err, doc) => {
             if (doc.length > 0) {
-                console.log(doc[0]);
                 if (doc[doc.length - 1].package.expDate > Date.now()) {
                     jobs.insertOne(job).then((result) => {
                         res.send(result.insertedCount > 0);
