@@ -58,9 +58,15 @@ client.connect((err) => {
 
     app.post("/add-admin", (req, res) => {
         const admin = req.body;
-        admins.insertOne(admin).then((result) => {
-            res.send(result.insertedCount > 0);
-        });
+        admins.find({ email }).toArray((err, doc) => {
+            if (doc.length < 0) {
+                admins.insertOne(admin).then((result) => {
+                    res.send(result.insertedCount > 0);
+                });
+            } else {
+                res.send("The email address is already in use by another account.")
+            }
+        })
     });
 
     app.post("/signup-employee", (req, res) => {
@@ -83,7 +89,7 @@ client.connect((err) => {
 
     app.post("/signup-seeker", (req, res) => {
         const seeker = req.body;
-        employee.find({ email }).toArray((err, doc) => {
+        seekers.find({ email }).toArray((err, doc) => {
             if (doc.length < 0) {
                 seekers.insertOne(seeker).then((result) => {
                     res.send(result.insertedCount > 0);
