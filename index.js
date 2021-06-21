@@ -73,7 +73,7 @@ client.connect((err) => {
                             } else {
                                 admins.insertOne(admin).then((result) => {
                                     res.send(result.insertedCount > 0);
-                                });                
+                                });
                             }
                         })
                     }
@@ -133,9 +133,17 @@ client.connect((err) => {
 
     app.post("/add-job", (req, res) => {
         const job = req.body;
-        jobs.insertOne(job).then((result) => {
-            res.send(result.insertedCount > 0);
-        });
+        const email = req.body.email;
+        empPackage.find({ 'package.email': email }).toArray((err, doc) => {
+            if (doc.length > 0) {
+                if (doc[doc.length - 1].expDate > new Date.getTime()) {
+                    jobs.insertOne(job).then((result) => {
+                        res.send(result.insertedCount > 0);
+                    });
+                }
+            }
+        })
+        
     });
 
     app.get("/jobs", (req, res) => {
