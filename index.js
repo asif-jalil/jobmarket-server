@@ -65,9 +65,13 @@ client.connect((err) => {
 
     app.post("/signup-employee", (req, res) => {
         const employee = req.body;
-        employees.insertOne(employee).then((result) => {
-            res.send(result.insertedCount > 0);
-        });
+        employee.find({ email }).toArray((err, doc) => {
+            if (doc.length < 0) {
+                employees.insertOne(employee).then((result) => {
+                    res.send(result.insertedCount > 0);
+                });
+            }
+        })
     });
 
     app.post("/employee-package", (req, res) => {
@@ -79,9 +83,13 @@ client.connect((err) => {
 
     app.post("/signup-seeker", (req, res) => {
         const seeker = req.body;
-        seekers.insertOne(seeker).then((result) => {
-            res.send(result.insertedCount > 0);
-        });
+        employee.find({ email }).toArray((err, doc) => {
+            if (doc.length < 0) {
+                seekers.insertOne(seeker).then((result) => {
+                    res.send(result.insertedCount > 0);
+                });
+            }
+        })
     });
 
     app.get("/employees", (req, res) => {
