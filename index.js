@@ -140,6 +140,8 @@ client.connect((err) => {
                     jobs.insertOne(job).then((result) => {
                         res.send(result.insertedCount > 0);
                     });
+                } else {
+                    res.send(false)
                 }
             }
         })
