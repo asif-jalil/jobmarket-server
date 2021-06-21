@@ -59,25 +59,27 @@ client.connect((err) => {
     app.post("/add-admin", (req, res) => {
         const admin = req.body;
         admins.find({ email }).toArray((err, doc) => {
-            if (doc.length < 0) {
+            if ((doc.length = 0)) {
                 admins.insertOne(admin).then((result) => {
                     res.send(result.insertedCount > 0);
                 });
             } else {
-                res.send(false)
+                res.send(false);
             }
-        })
+        });
     });
 
     app.post("/signup-employee", (req, res) => {
         const employee = req.body;
         employee.find({ email }).toArray((err, doc) => {
-            if (doc.length < 0) {
+            if ((doc.length = 0)) {
                 employees.insertOne(employee).then((result) => {
                     res.send(result.insertedCount > 0);
                 });
+            } else {
+                res.send(false);
             }
-        })
+        });
     });
 
     app.post("/employee-package", (req, res) => {
@@ -90,12 +92,14 @@ client.connect((err) => {
     app.post("/signup-seeker", (req, res) => {
         const seeker = req.body;
         seekers.find({ email }).toArray((err, doc) => {
-            if (doc.length < 0) {
+            if ((doc.length = 0)) {
                 seekers.insertOne(seeker).then((result) => {
                     res.send(result.insertedCount > 0);
                 });
+            } else {
+                res.send(false);
             }
-        })
+        });
     });
 
     app.get("/employees", (req, res) => {
@@ -124,7 +128,7 @@ client.connect((err) => {
     });
 
     app.get("/approvedJobs", (req, res) => {
-        jobs.find({status: 'approved'}).toArray((err, doc) => {
+        jobs.find({ status: "approved" }).toArray((err, doc) => {
             res.send(doc);
         });
     });
@@ -181,7 +185,6 @@ client.connect((err) => {
             }
         );
     });
-
 });
 
 app.listen(port, () => {
