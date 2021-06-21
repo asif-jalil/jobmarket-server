@@ -63,9 +63,22 @@ client.connect((err) => {
             if ((doc.length > 0)) {
                 res.send(false);
             } else {
-                admins.insertOne(admin).then((result) => {
-                    res.send(result.insertedCount > 0);
-                });
+                employees.find({ email: email }).toArray((err, doc) => {
+                    if (doc.length > 0) {
+                        res.send(false);
+                    } else {
+                        seekers.find({ email: email }).toArray((err, doc) => {
+                            if (doc.length > 0) {
+                                res.send(false)
+                            } else {
+                                admins.insertOne(admin).then((result) => {
+                                    res.send(result.insertedCount > 0);
+                                });                
+                            }
+                        })
+                    }
+                })
+                
             }
         });
     });
@@ -76,10 +89,8 @@ client.connect((err) => {
         employees.find({ email: email }).toArray((err, doc) => {
             console.log(doc);
             if ((doc.length > 0)) {
-                console.log("getting false");
                 res.send(false);
             } else {
-                console.log("getting true");
                 employees.insertOne(employee).then((result) => {
                     res.send(result.insertedCount > 0);
                 });
