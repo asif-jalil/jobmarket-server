@@ -60,12 +60,12 @@ client.connect((err) => {
         const admin = req.body;
         const email = req.body.email;
         admins.find({ email: email }).toArray((err, doc) => {
-            if ((doc.length = 0)) {
+            if ((doc.length > 0)) {
+                res.send(false);
+            } else {
                 admins.insertOne(admin).then((result) => {
                     res.send(result.insertedCount > 0);
                 });
-            } else {
-                res.send(false);
             }
         });
     });
@@ -74,12 +74,12 @@ client.connect((err) => {
         const employee = req.body;
         const email = req.body.email;
         employee.find({ email: email }).toArray((err, doc) => {
-            if ((doc.length = 0)) {
+            if ((doc.length > 0)) {
+                res.send(false);
+            } else {
                 employees.insertOne(employee).then((result) => {
                     res.send(result.insertedCount > 0);
                 });
-            } else {
-                res.send(false);
             }
         });
     });
@@ -95,12 +95,12 @@ client.connect((err) => {
         const seeker = req.body;
         const email = req.body.email;
         seekers.find({ email }).toArray((err, doc) => {
-            if ((doc.length = 0)) {
+            if ((doc.length > 0)) {
+                res.send(false);
+            } else {
                 seekers.insertOne(seeker).then((result) => {
                     res.send(result.insertedCount > 0);
                 });
-            } else {
-                res.send(false);
             }
         });
     });
