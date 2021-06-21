@@ -59,7 +59,7 @@ client.connect((err) => {
     app.post("/add-admin", (req, res) => {
         const admin = req.body;
         const email = req.body.email;
-        admins.find({ email }).toArray((err, doc) => {
+        admins.find({ email: email }).toArray((err, doc) => {
             if ((doc.length = 0)) {
                 admins.insertOne(admin).then((result) => {
                     res.send(result.insertedCount > 0);
@@ -73,7 +73,7 @@ client.connect((err) => {
     app.post("/signup-employee", (req, res) => {
         const employee = req.body;
         const email = req.body.email;
-        employee.find({ email }).toArray((err, doc) => {
+        employee.find({ email: email }).toArray((err, doc) => {
             if ((doc.length = 0)) {
                 employees.insertOne(employee).then((result) => {
                     res.send(result.insertedCount > 0);
